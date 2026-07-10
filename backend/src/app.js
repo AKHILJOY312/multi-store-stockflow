@@ -2,6 +2,8 @@ import express from "express";
 import cors from "cors";
 import helmet from "helmet";
 import morgan from "morgan";
+import authRoutes from "./routes/auth.routes.js";
+import errorMiddleware from "./middleware/error.middleware.js";
 
 const app = express();
 
@@ -16,5 +18,10 @@ app.get("/health", (req, res) => {
     message: "App is running healthy",
   });
 });
+
+app.use("/api/auth", authRoutes);
+
+// Global Error Handler
+app.use(errorMiddleware);
 
 export default app;

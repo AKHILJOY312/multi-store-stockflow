@@ -2,5 +2,8 @@ export const ENV = {
   PORT: process.env.PORT,
   MONGO_URI: process.env.MONGO_URI,
 
-  JWT_SECRET: process.env.JWT_SECRET,
+  JWT: {
+    SECRET: process.env.JWT_SECRET,
+    EXPIRES_IN: process.env.EXPIRES_IN,
+  },
 };
