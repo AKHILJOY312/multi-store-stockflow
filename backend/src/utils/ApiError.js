@@ -1,10 +1,10 @@
 class ApiError extends Error {
-  constructor(statusCode, message, errors = []) {
+  constructor(statusCode, data, message = "Success") {
     super(message);
 
     this.statusCode = statusCode;
-    this.success = false;
-    this.error = errors;
+    this.success = statusCode < 400;
+    this.data = data;
   }
 }
 

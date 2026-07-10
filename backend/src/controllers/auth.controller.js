@@ -8,7 +8,7 @@ class AuthController {
 
       return res
         .status(201)
-        .json(new ApiResponse(201, "User Registered successfully", result));
+        .json(new ApiResponse(201, result, "User Registered successfully"));
     } catch (error) {
       next(error);
     }
@@ -20,7 +20,7 @@ class AuthController {
 
       return res
         .status(200)
-        .json(new ApiResponse(200, "Login successful", result));
+        .json(new ApiResponse(200, result, "Login successful"));
     } catch (error) {
       next(error);
     }
