@@ -5,7 +5,7 @@ export const adjustValidator = [
 
   body("storeId").isMongoId().withMessage("Invade store id"),
 
-  body("change").isInt().withMessage("Change must be an integer"),
+  body("quantity").isInt().withMessage("Quantity must be an integer"),
 ];
 
 export const transferValidator = [

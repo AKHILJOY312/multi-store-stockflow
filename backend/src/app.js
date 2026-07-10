@@ -2,10 +2,13 @@ import express from "express";
 import cors from "cors";
 import helmet from "helmet";
 import morgan from "morgan";
+
 import authRoutes from "./routes/auth.routes.js";
 import productRoutes from "./routes/product.routes.js";
-import errorMiddleware from "./middleware/error.middleware.js";
+import stockRoutes from "./routes/stock.routes.js";
 import storeRoutes from "./routes/store.routes.js";
+
+import errorMiddleware from "./middleware/error.middleware.js";
 
 const app = express();
 
@@ -24,6 +27,7 @@ app.get("/health", (req, res) => {
 app.use("/api/auth", authRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/stores", storeRoutes);
+app.use("/api/stock", stockRoutes);
 
 // Global Error Handler
 app.use(errorMiddleware);
