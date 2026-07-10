@@ -1,4 +1,4 @@
-export const ENV = {
+const ENV = {
   PORT: process.env.PORT,
   MONGO_URI: process.env.MONGO_URI,
 
@@ -7,3 +7,4 @@ export const ENV = {
     EXPIRES_IN: process.env.EXPIRES_IN,
   },
 };
+export default ENV;
