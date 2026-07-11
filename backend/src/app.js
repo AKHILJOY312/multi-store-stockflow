@@ -3,6 +3,14 @@ import cors from "cors";
 import helmet from "helmet";
 import morgan from "morgan";
 
+import authRoutes from "./routes/auth.routes.js";
+import productRoutes from "./routes/product.routes.js";
+import stockRoutes from "./routes/stock.routes.js";
+import storeRoutes from "./routes/store.routes.js";
+import swaggerDocs from "./config/swagger.js";
+
+import errorMiddleware from "./middleware/error.middleware.js";
+
 const app = express();
 
 app.use(cors());
@@ -16,5 +24,13 @@ app.get("/health", (req, res) => {
     message: "App is running healthy",
   });
 });
+
+app.use("/api/auth", authRoutes);
+app.use("/api/products", productRoutes);
+app.use("/api/stores", storeRoutes);
+app.use("/api/stock", stockRoutes);
+swaggerDocs(app);
+// Global Error Handler
+app.use(errorMiddleware);
 
 export default app;
