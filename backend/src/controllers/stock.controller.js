@@ -13,6 +13,18 @@ class StockController {
       next(error);
     }
   }
+
+  async adjustStock(req, res, next) {
+    try {
+      const stock = await stockService.adjustStock(req.body);
+
+      return res.json(
+        new ApiResponse(200, stock, "Stock adjusted successfully"),
+      );
+    } catch (error) {
+      next(error);
+    }
+  }
 }
 
 export default new StockController();
