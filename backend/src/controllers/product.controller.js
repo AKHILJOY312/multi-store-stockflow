@@ -9,7 +9,7 @@ class ProductController {
 
       return res
         .status(201)
-        .json(new ApiError(201, product, "Product created successfully"));
+        .json(new ApiError(201, "Product created successfully", product));
     } catch (error) {
       next(error);
     }
@@ -21,7 +21,7 @@ class ProductController {
 
       return res
         .status(200)
-        .json(new ApiResponse(201, products, "Products fetched successfully"));
+        .json(new ApiResponse(201, "Products fetched successfully", products));
     } catch (error) {
       next(error);
     }

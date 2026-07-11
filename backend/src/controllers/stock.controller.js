@@ -7,7 +7,7 @@ class StockController {
       const stock = await stockService.getStock(req.query.lowStock);
 
       return res.json(
-        new ApiResponse(200, stock, "Stock fetched successfully"),
+        new ApiResponse(200, "Stock fetched successfully", stock),
       );
     } catch (error) {
       next(error);
@@ -19,7 +19,7 @@ class StockController {
       const stock = await stockService.adjustStock(req.body);
 
       return res.json(
-        new ApiResponse(200, stock, "Stock adjusted successfully"),
+        new ApiResponse(200, "Stock adjusted successfully", stock),
       );
     } catch (error) {
       next(error);
@@ -30,7 +30,7 @@ class StockController {
     try {
       const result = await stockService.transferStock(req.body);
       return res.json(
-        new ApiResponse(200, result, "Stock transferred successfully"),
+        new ApiResponse(200, "Stock transferred successfully", result),
       );
     } catch (error) {
       next(error);
