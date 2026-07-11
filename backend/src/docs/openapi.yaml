@@ -1,0 +1,225 @@
+openapi: 3.0.3
+
+info:
+  title: StockFlow API
+  version: 1.0.0
+  description: |
+    Multi-Store Stock Movement API
+
+servers:
+  - url: http://localhost:3000/api
+
+tags:
+  - name: Authentication
+  - name: Products
+  - name: Stores
+  - name: Stock
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    Error:
+      type: object
+      properties:
+        success:
+          type: boolean
+        message:
+          type: string
+
+    Product:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        name:
+          type: string
+        sku:
+          type: string
+
+    Store:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        name:
+          type: string
+
+    Inventory:
+      type: object
+      properties:
+        productId:
+          $ref: "#/components/schemas/Product"
+        storeId:
+          $ref: "#/components/schemas/Store"
+        quantity:
+          type: integer
+
+paths:
+  /auth/register:
+    post:
+      tags:
+        - Authentication
+      summary: Register a user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+                password:
+                  type: string
+                role:
+                  type: string
+      responses:
+        "201":
+          description: User registered
+
+  /auth/login:
+    post:
+      tags:
+        - Authentication
+      summary: Login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+      responses:
+        "200":
+          description: Login successful
+
+  /products:
+    get:
+      tags:
+        - Products
+      security:
+        - bearerAuth: []
+      summary: Get all products
+      responses:
+        "200":
+          description: Product list
+    post:
+      tags:
+        - Products
+      security:
+        - bearerAuth: []
+      summary: Create product
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Product"
+      responses:
+        "201":
+          description: Product created
+
+  /stores:
+    get:
+      tags:
+        - Stores
+      summary: Get all stores
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Store list
+    post:
+      tags:
+        - Stores
+      summary: Create store
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Store"
+      security:
+        - bearerAuth: []
+      responses:
+        "201":
+          description: Store created
+
+  /stock:
+    get:
+      tags:
+        - Stock
+      security:
+        - bearerAuth: []
+      summary: List inventory
+      parameters:
+        - in: query
+          name: lowStock
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Inventory list
+
+  /stock/adjust:
+    post:
+      tags:
+        - Stock
+      security:
+        - bearerAuth: []
+      summary: Adjust stock
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                productId:
+                  type: string
+                storeId:
+                  type: string
+                quantity:
+                  type: integer
+      responses:
+        "200":
+          description: Stock adjusted
+
+  /stock/transfer:
+    post:
+      tags:
+        - Stock
+      security:
+        - bearerAuth: []
+      summary: Transfer stock
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                productId:
+                  type: string
+                fromStore:
+                  type: string
+                toStore:
+                  type: string
+                quantity:
+                  type: integer
+      responses:
+        "200":
+          description: Transfer successful

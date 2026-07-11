@@ -1,5 +1,4 @@
 import productServices from "../services/product.services.js";
-import ApiError from "../utils/ApiError.js";
 import ApiResponse from "../utils/ApiResponse.js";
 
 class ProductController {
@@ -9,7 +8,7 @@ class ProductController {
 
       return res
         .status(201)
-        .json(new ApiError(201, "Product created successfully", product));
+        .json(new ApiResponse(201, "Product created successfully", product));
     } catch (error) {
       next(error);
     }

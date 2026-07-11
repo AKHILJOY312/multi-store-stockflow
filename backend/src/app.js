@@ -7,6 +7,7 @@ import authRoutes from "./routes/auth.routes.js";
 import productRoutes from "./routes/product.routes.js";
 import stockRoutes from "./routes/stock.routes.js";
 import storeRoutes from "./routes/store.routes.js";
+import swaggerDocs from "./config/swagger.js";
 
 import errorMiddleware from "./middleware/error.middleware.js";
 
@@ -28,7 +29,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/stores", storeRoutes);
 app.use("/api/stock", stockRoutes);
-
+swaggerDocs(app);
 // Global Error Handler
 app.use(errorMiddleware);
 

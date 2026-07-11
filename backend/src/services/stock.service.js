@@ -28,13 +28,13 @@ class StockService {
     //Check product
     const product = await Product.findById(productId);
     if (!product) {
-      throw new ApiError(404, "", "Product not found");
+      throw new ApiError(404, "Product not found");
     }
 
     //Check store
     const store = await Store.findById(storeId);
     if (!store) {
-      throw new ApiError(404, "", "Store not Found");
+      throw new ApiError(404, "Store not Found");
     }
 
     //Positive Adjustment
@@ -78,7 +78,7 @@ class StockService {
     );
 
     if (!inventory) {
-      throw new ApiError(409, "", "Insufficient stock or inventory not found");
+      throw new ApiError(409, "Insufficient stock or inventory not found");
     }
     return inventory;
   }
