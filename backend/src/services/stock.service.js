@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import Inventory from "../models/Inventory.js";
 import Product from "../models/Product.js";
 import Store from "../models/Store.js";
@@ -80,6 +81,79 @@ class StockService {
       throw new ApiError(409, "", "Insufficient stock or inventory not found");
     }
     return inventory;
+  }
+  async transferStock(data) {
+    const { productId, fromStore, toStore, quantity } = data;
+
+    //validate the product
+    const product = await Product.findById(productId);
+    if (!product) {
+      throw new ApiError(404, "Product not found");
+    }
+
+    //validate the source store
+    const sourceStore = await Store.findById(fromStore);
+    if (!sourceStore) {
+      throw new ApiError(404, "Source store not found");
+    }
+
+    //validate the destination store
+    const destination = await Store.findById(toStore);
+    if (!destination) {
+      throw new ApiError(404, "Destination store not found");
+    }
+    //start Transaction
+    const session = await mongoose.startSession();
+    session.startTransaction();
+
+    try {
+      //s1:decrement source
+      const sourceInventory = await Inventory.findOneAndUpdate(
+        {
+          productId,
+          storeId: fromStore,
+          quantity: { $gte: quantity },
+        },
+        {
+          $inc: {
+            quantity: -quantity,
+          },
+        },
+        { session, new: true },
+      );
+
+      if (!sourceInventory) {
+        throw new ApiError(409, "Insufficient stock");
+      }
+
+      //s2: increment destination
+      let destinationInventory = await Inventory.findOne({
+        productId,
+        storeId: toStore,
+      }).session(session);
+
+      if (!destinationInventory) {
+        destinationInventory = await Inventory.create(
+          [{ productId, storeId: toStore, quantity }],
+          { session },
+        );
+      } else {
+        await Inventory.findByIdAndUpdate(
+          destinationInventory._id,
+          { $inc: { quantity } },
+          { session },
+        );
+      }
+
+      await session.commitTransaction();
+      session.endSession();
+
+      return { success: true };
+    } catch (error) {
+      await session.abortTransaction();
+      session.endSession();
+      throw error;
+    }
   }
 }
 

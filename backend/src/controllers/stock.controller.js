@@ -25,6 +25,17 @@ class StockController {
       next(error);
     }
   }
+
+  async transferStock(req, res, next) {
+    try {
+      const result = await stockService.transferStock(req.body);
+      return res.json(
+        new ApiResponse(200, result, "Stock transferred successfully"),
+      );
+    } catch (error) {
+      next(error);
+    }
+  }
 }
 
 export default new StockController();
