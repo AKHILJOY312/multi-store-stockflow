@@ -32,7 +32,7 @@ function Login() {
       const res = await api.post("/auth/login", payload);
 
       localStorage.setItem("token", res.data.data.token);
-      localStorage.setItem("role", res.data.data.user.role);
+      localStorage.setItem("user", JSON.stringify(res.data.data.user));
 
       navigate("/dashboard");
     } catch (error) {
